@@ -121,37 +121,6 @@ void	ft_add_back(t_list **lst, char *str)
 	new->next = NULL;
 }
 
-void	get_list(t_list **dest, int fd)
-{
-	int		rd;
-	char	*buffer;
-	
-	while(!ft_foundnew(*dest))
-	{
-		buffer = malloc(BUFFER_SIZE + 1);	
-		rd = read(fd, buffer, BUFFER_SIZE);
-		if (!rd)
-		{	
-			free(buffer);
-			return ;
-		}
-		ft_add_back(dest, buffer);	
-	}
-}
-
-char	*get_line(t_list *lst)
-{
-	int		linelen;
-	char	*ret;
-
-	linelen = ft_linelen(lst);
-	ret = (char *)malloc(linelen + 1);
-	
-	ft_strcnpy(lst, ret);
-
-	return (ret);
-}
-
 void	ft_freelist(t_list **lst, t_list *to_replace)
 {
 	t_list	*next;
@@ -170,6 +139,47 @@ void	ft_freelist(t_list **lst, t_list *to_replace)
 		*lst = NULL;
 }
 
+void	get_list(t_list **dest, int fd)
+{
+	int		rd;
+	char	*buffer;
+	
+	while(!ft_foundnew(*dest))
+	{
+		buffer = malloc(BUFFER_SIZE + 1);	
+		if(!buffer)
+			return ;
+		rd = read(fd, buffer, BUFFER_SIZE);
+		if (rd <= 0)
+		{
+			free(buffer);
+			if (rd == 0 && *dest)
+				return ;
+			if (rd == -1)
+			{
+				free(buffer);
+				ft_freelist(dest, NULL);
+				return ;
+			}
+		}
+		buffer[rd] = '\0';
+		ft_add_back(dest, buffer);	
+	}
+}
+
+char	*get_line(t_list *lst)
+{
+	int		linelen;
+	char	*ret;
+
+	linelen = ft_linelen(lst);
+	ret = (char *)malloc(linelen + 2);
+	
+	ft_strcnpy(lst, ret);
+
+	return (ret);
+}
+
 void	clean_list(t_list **lst)
 {
 	t_list	*last;
@@ -185,7 +195,7 @@ void	clean_list(t_list **lst)
 		return ;
 	j = -1;
 	i = ft_newlen(last->str);
-	trimmed = (char *)malloc(ft_strlen(last->str) - i); 
+	trimmed = (char *)calloc(ft_strlen(last->str) - i + 2, 1); 
 	while(last->str[++i])
 		trimmed[++j] = last->str[i];
 	trimmed[++j] = '\0';
@@ -216,6 +226,7 @@ int main()
 	while(*(line = get_next_line(file)))
 	{
 		printf("%s", line);
-		sleep(1);
+		free(line);
 	}
+	free(line);
 }
