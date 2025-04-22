@@ -42,20 +42,18 @@ void	get_list(t_list **dest, int fd)
 		if(!buffer)
 			return ;
 		rd = read(fd, buffer, BUFFER_SIZE);
-		if (rd <= 0)
+		if (rd == 0)
 		{
-			if (rd == 0)
-			{
-				free(buffer);
-				return ;
-			}
-			if (rd == -1)
-			{
-				free(buffer);
-				ft_freelist(dest, NULL);
-				return ;
-			}
+			free(buffer);
+			return ;
 		}
+		if (rd == -1)
+		{
+			free(buffer);
+			ft_freelist(dest, NULL);
+			return ;
+		}
+		
 		buffer[rd] = '\0';
 		ft_add_back(dest, buffer);	
 	}
