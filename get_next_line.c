@@ -35,7 +35,7 @@ void	get_list(t_list **dest, int fd)
 {
 	int		rd;
 	char	*buffer;
-	
+
 	while(!ft_foundnew(*dest))
 	{
 		buffer = malloc(BUFFER_SIZE + 1);	
@@ -44,8 +44,11 @@ void	get_list(t_list **dest, int fd)
 		rd = read(fd, buffer, BUFFER_SIZE);
 		if (rd <= 0)
 		{
-			if (rd == 0 && *dest)
+			if (rd == 0)
+			{
+				free(buffer);
 				return ;
+			}
 			if (rd == -1)
 			{
 				free(buffer);
@@ -66,6 +69,8 @@ char	*get_line(t_list *lst)
 
 	linelen = 0;
 	iter = lst;
+	if(!iter)
+		return (NULL);
 	while(iter)
 	{
 		linelen += ft_newlen(iter->str);
@@ -79,25 +84,24 @@ char	*get_line(t_list *lst)
 void	clean_list(t_list **lst)
 {
 	t_list	*last;
-	t_list	*clean;
 	int		i;
 	int		j;
-	char	*trimmed;
 
-
-	clean = (t_list *)malloc(sizeof(t_list));
 	last = ft_lstlast(*lst);
 	if(!last)
 		return ;
 	j = -1;
 	i = ft_newlen(last->str);
-	trimmed = (char *)malloc(BUFFER_SIZE - i + 2); 
+	if(!last->str[0])
+	{
+		ft_freelist(lst, NULL);
+		return ;
+	}
+	ft_freelist(lst, last);
 	while(last->str[++i])
-		trimmed[++j] = last->str[i];
-	trimmed[++j] = '\0';
-	clean->str = trimmed;
-	clean->next = NULL;
-	ft_freelist(lst, clean);
+		last->str[++j] = last->str[i];
+	while(last->str[++j])
+		last->str[j] = '\0';
 }
 
 char	*get_next_line(int fd)
@@ -121,7 +125,7 @@ int main()
 	char *line;
 	while(*(line = get_next_line(file)))
 	{
-		printf("%s", line);
+		printf("%s\n", line);
 		free(line);
 	}
 	free(line);

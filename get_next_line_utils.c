@@ -63,20 +63,16 @@ void ft_add_back(t_list **lst, char *str)
 	new->next = NULL;
 }
 
-void ft_freelist(t_list **lst, t_list *to_replace)
+void ft_freelist(t_list **lst, t_list *last)
 {
 	t_list *next;
 	if (!lst)
 		return;
-	while (*lst)
+	while (*lst && *lst != last)
 	{
 		next = (*lst)->next;
 		free((*lst)->str);
 		free(*lst);
 		*lst = next;
 	}
-	if (to_replace)
-		*lst = to_replace;
-	else
-		*lst = NULL;
 }
