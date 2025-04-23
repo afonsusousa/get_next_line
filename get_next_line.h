@@ -14,7 +14,7 @@ char    *ft_strcnpy(t_list *lst, char *dest);
 int     ft_newlen(char *str);
 t_list  *ft_lstlast(t_list *lst);
 void    ft_add_back(t_list **lst, char *str);
-void    ft_freelist(t_list **lst, t_list *to_replace, char *last_buffer);
+void    ft_freelist(t_list **lst, t_list *to_replace);
 int     ft_foundnew(t_list *lst);
 void    get_list(t_list **dest, int fd);
 char    *serve_line(t_list *lst);

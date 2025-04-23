@@ -63,7 +63,7 @@ void ft_add_back(t_list **lst, char *str)
 	new->next = NULL;
 }
 
-void ft_freelist(t_list **lst, t_list *last, char *last_buffer)
+void ft_freelist(t_list **lst, t_list *last)
 {
 	t_list *next;
 	if (!lst)
@@ -80,7 +80,7 @@ void ft_freelist(t_list **lst, t_list *last, char *last_buffer)
 		*lst = last;
 	else
 	{
-		free(last_buffer);
+		free(last->str);
 		free(last);
 	}
 }
