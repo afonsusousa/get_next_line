@@ -94,8 +94,16 @@ void	clean_list(t_list **lst)
         ft_freelist(lst, NULL);
         return;
     }
+    
+    // Check if we're at the end of the string
+    if (!last->str[i]) {
+        ft_freelist(lst, NULL);
+        return;
+    }
+    
     ft_freelist(lst, last);
     j = 0;
+    // Copy remainder (skip the newline character)
     while(last->str[i])
     {
         last->str[j] = last->str[i];
