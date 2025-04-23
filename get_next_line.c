@@ -123,7 +123,7 @@ int main()
 	char *line;
 	while(*(line = get_next_line(file)))
 	{
-		printf("%s\n", line);
+		printf("%s", line);
 		free(line);
 	}
 	free(line);
