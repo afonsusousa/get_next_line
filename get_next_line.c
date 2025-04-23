@@ -81,25 +81,28 @@ char	*serve_line(t_list *lst)
 
 void	clean_list(t_list **lst)
 {
-	t_list	*last;
-	int		i;
-	int		j;
+    t_list *last;
+    int i;
+    int j;
 
-	last = ft_lstlast(*lst);
-	if(!last || !last->str)
-		return ;
-	j = -1;
-	i = ft_newlen(last->str);
-	if(!last->str[0])
-	{
-		ft_freelist(lst, NULL);
-		return ;
-	}
-	ft_freelist(lst, last);
-	while(last->str[++i])
-		last->str[++j] = last->str[i];
-	while(last->str[++j])
-		last->str[j] = '\0';
+    last = ft_lstlast(*lst);
+    if(!last || !last->str)
+        return;
+    i = ft_newlen(last->str);
+    if(!last->str[0])
+    {
+        ft_freelist(lst, NULL);
+        return;
+    }
+    ft_freelist(lst, last);
+    j = 0;
+    while(last->str[i])
+    {
+        last->str[j] = last->str[i];
+        i++;
+        j++;
+    }
+    last->str[j] = '\0';  // Properly null-terminate
 }
 
 char	*get_next_line(int fd)
