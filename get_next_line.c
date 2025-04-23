@@ -59,7 +59,7 @@ void	get_list(t_list **dest, int fd)
 	}
 }
 
-char	*get_line(t_list *lst)
+char	*serve_line(t_list *lst)
 {
 	int		linelen;
 	t_list	*iter;
@@ -116,7 +116,7 @@ char	*get_next_line(int fd)
 
 	get_list(&line, fd);
 
-	ret = get_line(line);
+	ret = serve_line(line);
 	
 	clean_list(&line);
 	
