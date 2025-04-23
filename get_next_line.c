@@ -6,7 +6,7 @@
 /*   By: amagno-r <amagno-r@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:57:37 by amagno-r          #+#    #+#             */
-/*   Updated: 2025/04/20 20:34:10 by amagno-r         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:43:10 by amagno-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	get_list(t_list **dest, int fd)
 
 	while(!ft_foundnew(*dest))
 	{
-		buffer = malloc(BUFFER_SIZE + 1);	
+		buffer = malloc(BUFFER_SIZE + 1);
 		if(!buffer)
 			return ;
 		rd = read(fd, buffer, BUFFER_SIZE);
@@ -59,7 +59,7 @@ void	get_list(t_list **dest, int fd)
 	}
 }
 
-char	*get_line(t_list *lst)
+char	*serve_line(t_list *lst)
 {
 	int		linelen;
 	t_list	*iter;
@@ -86,7 +86,7 @@ void	clean_list(t_list **lst)
 	int		j;
 
 	last = ft_lstlast(*lst);
-	if(!last)
+	if(!last || !last->str)
 		return ;
 	j = -1;
 	i = ft_newlen(last->str);
@@ -109,17 +109,18 @@ char	*get_next_line(int fd)
 
 	get_list(&line, fd);
 
-	ret = get_line(line);
+	ret = serve_line(line);
 	
 	clean_list(&line);
 	
 	return (ret);
 }
 
+
 #include <stdio.h>
-int main()
+int main(int argc, char **argv)
 {
-	int	file = open("test.txt", O_RDONLY);
+	int	file = open(argv[1], O_RDONLY);
 	char *line;
 	while(*(line = get_next_line(file)))
 	{
