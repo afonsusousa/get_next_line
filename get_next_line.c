@@ -50,7 +50,7 @@ void	get_list(t_list **dest, int fd)
 		if (rd == -1)
 		{
 			free(buffer);
-			ft_freelist(dest, NULL);
+			ft_freelist(dest, NULL, NULL);
 			return ;
 		}
 		
@@ -106,7 +106,7 @@ void	clean_list(t_list **lst)
 	buffer[j] = 0;
 	new_node->str = buffer;
 	new_node->next = NULL;
-	ft_freelist(lst, new_node);
+	ft_freelist(lst, new_node, buffer);
 }
 
 char	*get_next_line(int fd)
