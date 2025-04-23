@@ -17,7 +17,7 @@ void    ft_add_back(t_list **lst, char *str);
 void    ft_freelist(t_list **lst, t_list *to_replace);
 int     ft_foundnew(t_list *lst);
 void    get_list(t_list **dest, int fd);
-char    *serve_line(t_list *lst);
+char    *get_line(t_list *lst);
 void    clean_list(t_list **lst);
 char    *get_next_line(int fd);
 

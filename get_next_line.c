@@ -6,7 +6,7 @@
 /*   By: amagno-r <amagno-r@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:57:37 by amagno-r          #+#    #+#             */
-/*   Updated: 2025/04/23 17:43:10 by amagno-r         ###   ########.fr       */
+/*   Updated: 2025/04/20 20:34:10 by amagno-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	get_list(t_list **dest, int fd)
 
 	while(!ft_foundnew(*dest))
 	{
-		buffer = malloc(BUFFER_SIZE + 1);
+		buffer = malloc(BUFFER_SIZE + 1);	
 		if(!buffer)
 			return ;
 		rd = read(fd, buffer, BUFFER_SIZE);
@@ -59,7 +59,7 @@ void	get_list(t_list **dest, int fd)
 	}
 }
 
-char	*serve_line(t_list *lst)
+char	*get_line(t_list *lst)
 {
 	int		linelen;
 	t_list	*iter;
@@ -81,36 +81,32 @@ char	*serve_line(t_list *lst)
 
 void	clean_list(t_list **lst)
 {
-    t_list *last;
-    int i;
-    int j;
-
-    last = ft_lstlast(*lst);
-    if(!last || !last->str)
-        return;
-    i = ft_newlen(last->str);
-    if(!last->str[0])
-    {
-        ft_freelist(lst, NULL);
-        return;
-    }
-    
-    // Check if we're at the end of the string
-    if (!last->str[i]) {
-        ft_freelist(lst, NULL);
-        return;
-    }
-    
-    ft_freelist(lst, last);
-    j = 0;
-    // Copy remainder (skip the newline character)
-    while(last->str[i])
-    {
-        last->str[j] = last->str[i];
-        i++;
-        j++;
-    }
-    last->str[j] = '\0';  // Properly null-terminate
+	int		i;
+	int		j;
+	char	*buffer;
+	t_list	*new_node;
+	t_list	*last;
+	
+	new_node = (t_list *)malloc(sizeof(t_list)); 
+	if(!new_node)
+		return ;
+	buffer = (char *)malloc(BUFFER_SIZE + 1);
+	if(!buffer)
+	{
+		free(new_node);
+		return ;
+	}
+	last = ft_lstlast(*lst);
+	if(!last)
+		return ;
+	i = ft_newlen(last->str);
+	j = 0;
+	while(last->str[i] && last->str[++i])
+		buffer[j++] = last->str[i];
+	buffer[j] = 0;
+	new_node->str = buffer;
+	new_node->next = NULL;
+	ft_freelist(lst, new_node);
 }
 
 char	*get_next_line(int fd)
@@ -120,24 +116,23 @@ char	*get_next_line(int fd)
 
 	get_list(&line, fd);
 
-	ret = serve_line(line);
+	ret = get_line(line);
 	
 	clean_list(&line);
 	
 	return (ret);
 }
 
-
-#include <stdio.h>
-int main(int argc, char **argv)
-{
-	int	file = open(argv[1], O_RDONLY);
-	char *line;
-	while(*(line = get_next_line(file)))
-	{
-		printf("%s", line);
-		free(line);
-	}
-	free(line);
-	close(file);
-}
+// #include <stdio.h>
+// int main()
+// {
+// 	int	file = open("test.txt", O_RDONLY);
+// 	char *line;
+// 	while(*(line = get_next_line(file)))
+// 	{
+// 		printf("%s", line);
+// 		free(line);
+// 	}
+// 	free(line);
+// 	close(file);
+// }

@@ -68,11 +68,19 @@ void ft_freelist(t_list **lst, t_list *last)
 	t_list *next;
 	if (!lst)
 		return;
-	while (*lst && *lst != last)
+	while (*lst)
 	{
 		next = (*lst)->next;
 		free((*lst)->str);
 		free(*lst);
 		*lst = next;
+	}
+	*lst = NULL;
+	if(last->str[0])
+		*lst = last;
+	else
+	{
+		free(last->str);
+		free(last);
 	}
 }
