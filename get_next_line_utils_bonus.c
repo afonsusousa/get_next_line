@@ -81,6 +81,11 @@ void 	ft_freelist(t_list **begin_list, t_list *preserve, int fd)
 	{
 		if((preserve->str[0]))
 			*begin_list = preserve;
+		else
+		{
+			free(preserve->str);
+			free(preserve);
+		}
 		return ;
 	}
 	

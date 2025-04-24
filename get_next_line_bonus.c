@@ -121,13 +121,13 @@ char	*get_next_line(int fd)
 	return (ret);
 }
 
-/*
+
 #include <stdio.h>
 int main()
 {
 	int	file = open("test.txt", O_RDONLY);
 	char *line;
-	while(*(line = get_next_line(file)))
+	while(line = get_next_line(file))
 	{
 		printf("%s", line);
 		free(line);
@@ -135,4 +135,3 @@ int main()
 	free(line);
 	close(file);
 }
-*/
