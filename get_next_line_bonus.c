@@ -6,7 +6,7 @@
 /*   By: amagno-r <amagno-r@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:57:37 by amagno-r          #+#    #+#             */
-/*   Updated: 2025/04/24 17:19:29 by amagno-r         ###   ########.fr       */
+/*   Updated: 2025/04/20 20:34:10 by amagno-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,9 @@ void	get_list(t_list **dest, int fd)
 		if (!buffer)
 			return ;
 		rd = read(fd, buffer, BUFFER_SIZE);
-		if (rd == 0)
+		if (rd <= 0)
 		{
 			free(buffer);
-			return ;
-		}
-		if (rd < 0)
-		{
-			free(buffer);
-			ft_freelist(dest, NULL, fd);
 			return ;
 		}
 		buffer[rd] = '\0';
@@ -86,7 +80,7 @@ void	clean_list(t_list **lst, int fd)
 	char	*buffer;
 	t_list	*preserve;
 	t_list	*last;
-
+	
 	preserve = (t_list *)malloc(sizeof(t_list));
 	if (!preserve)
 		return ;
@@ -112,7 +106,7 @@ void	clean_list(t_list **lst, int fd)
 
 char	*get_next_line(int fd)
 {
-	static t_list	*line;
+	static t_list	*line = NULL;
 	char			*ret;
 
 	if (fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE < 1)
@@ -124,11 +118,21 @@ char	*get_next_line(int fd)
 	clean_list(&line, fd);
 	return (ret);
 }
+
+
 // #include <stdio.h>
 // int main(int argc, char **argv)
 // {
 // 	int	file = open(argv[1], O_RDONLY);
 // 	char *line;
+// 	while(line = get_next_line(file))
+// 	{
+// 		printf("%s", line);
+// 		free(line);
+// 	}
+
+// 	close (file);
+// 	file = open(argv[1], O_RDONLY);
 // 	while(line = get_next_line(file))
 // 	{
 // 		printf("%s", line);
