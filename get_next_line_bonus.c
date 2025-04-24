@@ -6,7 +6,7 @@
 /*   By: amagno-r <amagno-r@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:57:37 by amagno-r          #+#    #+#             */
-/*   Updated: 2025/04/20 20:34:10 by amagno-r         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:19:29 by amagno-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	clean_list(t_list **lst, int fd)
 	char	*buffer;
 	t_list	*preserve;
 	t_list	*last;
-	
+
 	preserve = (t_list *)malloc(sizeof(t_list));
 	if (!preserve)
 		return ;
@@ -118,8 +118,6 @@ char	*get_next_line(int fd)
 	clean_list(&line, fd);
 	return (ret);
 }
-
-
 // #include <stdio.h>
 // int main(int argc, char **argv)
 // {

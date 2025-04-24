@@ -1,11 +1,22 @@
-#include "get_next_line.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: amagno-r <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/24 17:17:52 by amagno-r          #+#    #+#             */
+/*   Updated: 2025/04/24 17:22:44 by amagno-r         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "get_next_line.h"
 #include <stdlib.h>
 
-char *ft_strcnpy(t_list *lst, char *dest)
+char	*ft_strcnpy(t_list *lst, char *dest)
 {
-	int i;
-	char *src;
+	int		i;
+	char	*src;
 
 	i = -1;
 	while (lst)
@@ -27,9 +38,9 @@ char *ft_strcnpy(t_list *lst, char *dest)
 	return (dest);
 }
 
-int ft_newlen(char *str)
+int	ft_newlen(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (*str && *str != '\n' && ++i)
@@ -37,7 +48,7 @@ int ft_newlen(char *str)
 	return (i);
 }
 
-t_list *ft_lstlast(t_list *lst)
+t_list	*ft_lstlast(t_list *lst)
 {
 	if (!lst)
 		return (NULL);
@@ -46,15 +57,15 @@ t_list *ft_lstlast(t_list *lst)
 	return (lst);
 }
 
-void ft_add_back(t_list **lst, char *str)
+void	ft_add_back(t_list **lst, char *str)
 {
-	t_list *new;
-	t_list *last;
+	t_list	*new;
+	t_list	*last;
 
 	last = ft_lstlast(*lst);
 	new = (t_list *)malloc(sizeof(t_list));
 	if (!new)
-		return;
+		return ;
 	if (!last)
 		*lst = new;
 	else
@@ -63,11 +74,12 @@ void ft_add_back(t_list **lst, char *str)
 	new->next = NULL;
 }
 
-void ft_freelist(t_list **lst, t_list *last)
+void	ft_freelist(t_list **lst, t_list *last)
 {
-	t_list *next;
+	t_list	*next;
+
 	if (!lst)
-		return;
+		return ;
 	while (*lst)
 	{
 		next = (*lst)->next;
@@ -76,7 +88,7 @@ void ft_freelist(t_list **lst, t_list *last)
 		*lst = next;
 	}
 	*lst = NULL;
-	if(last->str[0])
+	if (last->str[0])
 		*lst = last;
 	else
 	{
