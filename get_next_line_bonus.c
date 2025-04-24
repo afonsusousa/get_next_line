@@ -54,7 +54,6 @@ void	get_list(t_list **dest, int fd)
 
 char	*serve_line(t_list *lst, int fd)
 {
-	int		i;
 	int		linelen;
 	t_list	*iter;
 	char	*ret;
@@ -65,10 +64,8 @@ char	*serve_line(t_list *lst, int fd)
 		return (NULL);
 	while (iter)
 	{
-		i = 0;
 		if (iter->fd == fd)
-			while (iter->str[i++])
-				linelen++;
+			linelen += ft_newlen(iter->str);
 		iter = iter->next;
 	}
 	ret = (char *)malloc(linelen + 2);
@@ -83,23 +80,24 @@ void	clean_list(t_list **lst, int fd)
 	char	*buffer;
 	t_list	*preserve;
 	t_list	*last;
-
-	i = 0;
-	j = 0;
+	
+	preserve = (t_list *)malloc(sizeof(t_list));
+	if (!preserve)
+		return ;
 	buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buffer)
-		return ;
+		return (free(preserve));
 	last = ft_lstlast(*lst, fd);
 	if (!last)
 		return ;
-	while (last->str[i])
-		i++;
+	i = ft_newlen(last->str);
+	j = 0;
 	while (last->str[i] && last->str[++i])
 		buffer[j++] = last->str[i];
 	buffer[j] = 0;
-	preserve = ft_lstnew(buffer, fd);
-	if (!preserve)
-		return ;
+	preserve->fd = fd;
+	preserve->str = buffer;
+	preserve->next = NULL;
 	ft_freelist(lst, preserve, fd);
 }
 
@@ -117,6 +115,7 @@ char	*get_next_line(int fd)
 	clean_list(&line, fd);
 	return (ret);
 }
+
 
 // #include <stdio.h>
 // int main(int argc, char **argv)
