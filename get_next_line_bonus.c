@@ -42,7 +42,7 @@ void	get_list(t_list **dest, int fd)
 		if(!buffer)
 			return ;
 		rd = read(fd, buffer, BUFFER_SIZE);
-		if (rd == 0)
+		if (rd <= 0)
 		{
 			free(buffer);
 			return ;
@@ -78,16 +78,16 @@ void	clean_list(t_list **lst, int fd)
 	int		i;
 	int		j;
 	char	*buffer;
-	t_list	*new_node;
+	t_list	*preserve;
 	t_list	*last;
 	
-	new_node = (t_list *)malloc(sizeof(t_list)); 
-	if(!new_node)
+	preserve = (t_list *)malloc(sizeof(t_list)); 
+	if(!preserve)
 		return ;
 	buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if(!buffer)
 	{
-		free(new_node);
+		free(preserve);
 		return ;
 	}
 	last = ft_lstlast(*lst, fd);
@@ -98,10 +98,10 @@ void	clean_list(t_list **lst, int fd)
 	while(last->str[i] && last->str[++i])
 		buffer[j++] = last->str[i];
 	buffer[j] = 0;
-	new_node->fd = fd;
-	new_node->str = buffer;
-	new_node->next = NULL;
-	ft_freelist(lst, new_node, fd);
+	preserve->fd = fd;
+	preserve->str = buffer;
+	preserve->next = NULL;
+	ft_freelist(lst, preserve, fd);
 }
 
 char	*get_next_line(int fd)
@@ -109,7 +109,7 @@ char	*get_next_line(int fd)
 	static t_list	*line = NULL;	
 	char	*ret;
 
-	if(fd < 0 || read(fd, 0, 0) == -1 || BUFFER_SIZE < 1)
+	if(fd < 0 || read(fd, 0, 0) < 0|| BUFFER_SIZE < 1)
 		return (NULL);
 	get_list(&line, fd);
 
@@ -125,9 +125,9 @@ char	*get_next_line(int fd)
 
 
 // #include <stdio.h>
-// int main()
+// int main(int argc, char **argv)
 // {
-// 	int	file = open("test.txt", O_RDONLY);
+// 	int	file = open(argv[1], O_RDONLY);
 // 	char *line;
 // 	while(line = get_next_line(file))
 // 	{

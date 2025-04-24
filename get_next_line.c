@@ -123,11 +123,11 @@ char	*get_next_line(int fd)
 }
 
 // #include <stdio.h>
-// int main()
+// int main(int argc, char **argv)
 // {
-// 	int	file = open("test.txt", O_RDONLY);
+// 	int	file = open(argv[1], O_RDONLY);
 // 	char *line;
-// 	while(*(line = get_next_line(file)))
+// 	while(line = get_next_line(file))
 // 	{
 // 		printf("%s", line);
 // 		free(line);
