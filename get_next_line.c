@@ -16,9 +16,9 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-int ft_foundnew(t_list *lst)
+int	ft_foundnew(t_list *lst)
 {
-	int i;
+	int	i;
 
 	while (lst)
 	{
@@ -36,10 +36,10 @@ void	get_list(t_list **dest, int fd)
 	int		rd;
 	char	*buffer;
 
-	while(!ft_foundnew(*dest))
+	while (!ft_foundnew(*dest))
 	{
-		buffer = malloc(BUFFER_SIZE + 1);	
-		if(!buffer)
+		buffer = malloc(BUFFER_SIZE + 1);
+		if (!buffer)
 			return ;
 		rd = read(fd, buffer, BUFFER_SIZE);
 		if (rd == 0)
@@ -48,7 +48,7 @@ void	get_list(t_list **dest, int fd)
 			return ;
 		}
 		buffer[rd] = '\0';
-		ft_add_back(dest, buffer);	
+		ft_add_back(dest, buffer);
 	}
 }
 
@@ -60,9 +60,9 @@ char	*serve_line(t_list *lst)
 
 	linelen = 0;
 	iter = lst;
-	if(!iter)
+	if (!iter)
 		return (NULL);
-	while(iter)
+	while (iter)
 	{
 		linelen += ft_newlen(iter->str);
 		iter = iter->next;
@@ -80,21 +80,21 @@ void	clean_list(t_list **lst)
 	t_list	*new_node;
 	t_list	*last;
 	
-	new_node = (t_list *)malloc(sizeof(t_list)); 
-	if(!new_node)
+	new_node = (t_list *)malloc(sizeof(t_list));
+	if (!new_node)
 		return ;
 	buffer = (char *)malloc(BUFFER_SIZE + 1);
-	if(!buffer)
+	if (!buffer)
 	{
 		free(new_node);
 		return ;
 	}
 	last = ft_lstlast(*lst);
-	if(!last)
+	if (!last)
 		return ;
 	i = ft_newlen(last->str);
 	j = 0;
-	while(last->str[i] && last->str[++i])
+	while (last->str[i] && last->str[++i])
 		buffer[j++] = last->str[i];
 	buffer[j] = 0;
 	new_node->str = buffer;
@@ -104,21 +104,16 @@ void	clean_list(t_list **lst)
 
 char	*get_next_line(int fd)
 {
-	static t_list	*line = NULL;	
-	char	*ret;
+	static t_list	*line = NULL;
+	char			*ret;
 
-	if(fd < 0 || read(fd, 0, 0) == -1 || BUFFER_SIZE < 1)
+	if (fd < 0 || read(fd, 0, 0) == -1 || BUFFER_SIZE < 1)
 		return (NULL);
-
 	get_list(&line, fd);
-
-	if(!line)
+	if (!line)
 		return (NULL);
-
 	ret = serve_line(line);
-	
 	clean_list(&line);
-	
 	return (ret);
 }
 

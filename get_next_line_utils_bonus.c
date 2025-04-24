@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: amagno-r <amagno-r@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/20 17:57:37 by amagno-r          #+#    #+#             */
+/*   Updated: 2025/04/20 20:34:10 by amagno-r         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line_bonus.h"
 
 #include <stdlib.h>
 
-char *ft_strcnpy(t_list *lst, char *dest, int fd)
+char	*ft_strcnpy(t_list *lst, char *dest, int fd)
 {
-	int i;
-	char *src;
+	int		i;
+	char	*src;
 
 	i = -1;
 	while (lst)
@@ -27,9 +39,9 @@ char *ft_strcnpy(t_list *lst, char *dest, int fd)
 	return (dest);
 }
 
-int ft_newlen(char *str)
+int	ft_newlen(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (*str && *str != '\n' && ++i)
@@ -37,7 +49,7 @@ int ft_newlen(char *str)
 	return (i);
 }
 
-t_list *ft_lstlast(t_list *lst, int fd)
+t_list	*ft_lstlast(t_list *lst, int fd)
 {
 	t_list	*last_occurence;
 
@@ -48,26 +60,26 @@ t_list *ft_lstlast(t_list *lst, int fd)
 		return (lst);
 	while (lst)
 	{
-		if(lst->fd == fd)
+		if (lst->fd == fd)
 			last_occurence = lst;
 		if (!lst->next)
-			break;
+			break ;
 		lst = lst->next;
 	}
 	return (last_occurence);
 }
 
-void ft_add_back(t_list **lst, char *str, int fd)
+void	ft_add_back(t_list **lst, char *str, int fd)
 {
-	t_list *new;
-	t_list *last;
+	t_list	*new;
+	t_list	*last;
 
 	last = *lst;
-	while(last && last->next)
+	while (last && last->next)
 		last = last->next;
 	new = (t_list *)malloc(sizeof(t_list));
 	if (!new)
-		return;
+		return ;
 	if (!last)
 		*lst = new;
 	else
@@ -77,27 +89,24 @@ void ft_add_back(t_list **lst, char *str, int fd)
 	new->next = NULL;
 }
 
-void 	ft_freelist(t_list **begin_list, t_list *preserve, int fd)
+void	ft_freelist(t_list **begin_list, t_list *preserve, int fd)
 {
 	t_list	*tmp;
 
-	if(begin_list == NULL)
+	if (begin_list == NULL)
 		return ;
-	if(*begin_list == NULL)
+	if (*begin_list == NULL)
 	{
-		if(preserve->str[0] && preserve->fd == fd)
+		if (preserve->str[0] && preserve->fd == fd)
 			*begin_list = preserve;
 		else
 		{
 			free(preserve->str);
 			free(preserve);
-			if(begin_list)
-				*begin_list = NULL;
 		}
 		return ;
 	}
-	
-	if((*begin_list)->fd == fd)
+	if ((*begin_list)->fd == fd)
 	{
 		tmp = *begin_list;
 		*begin_list = (*begin_list)->next;
@@ -107,4 +116,4 @@ void 	ft_freelist(t_list **begin_list, t_list *preserve, int fd)
 	}
 	else
 		ft_freelist(&((*begin_list)->next), preserve, fd);
-}	
+}
