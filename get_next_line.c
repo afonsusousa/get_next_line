@@ -104,10 +104,10 @@ void	clean_list(t_list **lst)
 
 char	*get_next_line(int fd)
 {
-	static t_list	*line = NULL;
+	static t_list	*line;
 	char			*ret;
 
-	if (fd < 0 || read(fd, 0, 0) == -1 || BUFFER_SIZE < 1)
+	if (fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE < 1)
 		return (NULL);
 	get_list(&line, fd);
 	if (!line)

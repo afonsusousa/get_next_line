@@ -42,9 +42,15 @@ void	get_list(t_list **dest, int fd)
 		if (!buffer)
 			return ;
 		rd = read(fd, buffer, BUFFER_SIZE);
-		if (rd <= 0)
+		if (rd == 0)
 		{
 			free(buffer);
+			return ;
+		}
+		if (rd < 0)
+		{
+			free(buffer);
+			ft_freelist(dest, NULL, fd);
 			return ;
 		}
 		buffer[rd] = '\0';
@@ -106,7 +112,7 @@ void	clean_list(t_list **lst, int fd)
 
 char	*get_next_line(int fd)
 {
-	static t_list	*line = NULL;
+	static t_list	*line;
 	char			*ret;
 
 	if (fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE < 1)
