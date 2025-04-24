@@ -39,16 +39,6 @@ char	*ft_strcnpy(t_list *lst, char *dest, int fd)
 	return (dest);
 }
 
-int	ft_newlen(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (*str && *str != '\n' && ++i)
-		str++;
-	return (i);
-}
-
 t_list	*ft_lstlast(t_list *lst, int fd)
 {
 	t_list	*last_occurence;
@@ -87,6 +77,19 @@ void	ft_add_back(t_list **lst, char *str, int fd)
 	new->fd = fd;
 	new->str = str;
 	new->next = NULL;
+}
+
+t_list	*ft_lstnew(char *str, int fd)
+{
+	t_list	*ret;
+
+	ret = (t_list *)malloc(sizeof(t_list));
+	if (!ret)
+		return (NULL);
+	ret->fd = fd;
+	ret->str = str;
+	ret->next = NULL;
+	return (ret);
 }
 
 void	ft_freelist(t_list **begin_list, t_list *preserve, int fd)

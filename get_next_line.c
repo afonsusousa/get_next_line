@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amagno-r <amagno-r@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line_bonus.h"
+#include "get_next_line.h"
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -54,6 +54,7 @@ void	get_list(t_list **dest, int fd)
 
 char	*serve_line(t_list *lst, int fd)
 {
+	int		i;
 	int		linelen;
 	t_list	*iter;
 	char	*ret;
@@ -64,8 +65,10 @@ char	*serve_line(t_list *lst, int fd)
 		return (NULL);
 	while (iter)
 	{
+		i = 0;
 		if (iter->fd == fd)
-			linelen += ft_newlen(iter->str);
+			while (iter->str[i++])
+				linelen++;
 		iter = iter->next;
 	}
 	ret = (char *)malloc(linelen + 2);
@@ -81,26 +84,22 @@ void	clean_list(t_list **lst, int fd)
 	t_list	*preserve;
 	t_list	*last;
 
-	preserve = (t_list *)malloc(sizeof(t_list));
-	if (!preserve)
-		return ;
+	i = 0;
+	j = 0;
 	buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buffer)
-	{
-		free(preserve);
 		return ;
-	}
 	last = ft_lstlast(*lst, fd);
 	if (!last)
 		return ;
-	i = ft_newlen(last->str);
-	j = 0;
+	while (last->str[i])
+		i++;
 	while (last->str[i] && last->str[++i])
 		buffer[j++] = last->str[i];
 	buffer[j] = 0;
-	preserve->fd = fd;
-	preserve->str = buffer;
-	preserve->next = NULL;
+	preserve = ft_lstnew(buffer, fd);
+	if (!preserve)
+		return ;
 	ft_freelist(lst, preserve, fd);
 }
 

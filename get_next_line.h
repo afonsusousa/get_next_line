@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amagno-r <amagno-r@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -25,7 +25,7 @@ typedef struct s_list
 }	t_list;
 
 char	*ft_strcnpy(t_list *lst, char *dest, int fd);
-int		ft_newlen(char *str);
+t_list	*ft_lstnew(char *str, int fd);
 t_list	*ft_lstlast(t_list *lst, int fd);
 void	ft_add_back(t_list **lst, char *str, int fd);
 void	ft_freelist(t_list **lst, t_list *preserve, int fd);
