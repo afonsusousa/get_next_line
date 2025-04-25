@@ -80,7 +80,7 @@ void	clean_list(t_list **lst, int fd)
 	char	*buffer;
 	t_list	*preserve;
 	t_list	*last;
-	
+
 	preserve = (t_list *)malloc(sizeof(t_list));
 	if (!preserve)
 		return ;
@@ -115,7 +115,6 @@ char	*get_next_line(int fd)
 	clean_list(&line, fd);
 	return (ret);
 }
-
 
 // #include <stdio.h>
 // int main(int argc, char **argv)
