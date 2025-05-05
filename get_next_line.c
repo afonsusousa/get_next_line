@@ -49,6 +49,7 @@ void	get_list(t_list **dest, int fd)
 		}
 		buffer[rd] = '\0';
 		ft_add_back(dest, buffer, fd);
+		free(buffer);
 	}
 }
 
@@ -77,26 +78,21 @@ void	clean_list(t_list **lst, int fd)
 {
 	int		i;
 	int		j;
-	char	*buffer;
 	t_list	*preserve;
 	t_list	*last;
 
 	preserve = (t_list *)malloc(sizeof(t_list));
 	if (!preserve)
 		return ;
-	buffer = (char *)malloc(BUFFER_SIZE + 1);
-	if (!buffer)
-		return (free(preserve));
 	last = ft_lstlast(*lst, fd);
 	if (!last)
 		return ;
 	i = ft_newlen(last->str);
 	j = 0;
 	while (last->str[i] && last->str[++i])
-		buffer[j++] = last->str[i];
-	buffer[j] = 0;
+		preserve->str[j++] = last->str[i];
+	preserve->str[j] = 0;
 	preserve->fd = fd;
-	preserve->str = buffer;
 	preserve->next = NULL;
 	ft_freelist(lst, preserve, fd);
 }
@@ -106,7 +102,7 @@ char	*get_next_line(int fd)
 	static t_list	*line = NULL;
 	char			*ret;
 
-	if (fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE < 1)
+	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
 	get_list(&line, fd);
 	if (!line)

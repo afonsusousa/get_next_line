@@ -71,22 +71,28 @@ t_list	*ft_lstlast(t_list *lst, int fd)
 
 void	ft_add_back(t_list **lst, char *str, int fd)
 {
+	int i;
 	t_list	*new;
 	t_list	*last;
 
+	i = -1;
 	last = *lst;
 	while (last && last->next)
 		last = last->next;
 	new = (t_list *)malloc(sizeof(t_list));
 	if (!new)
 		return ;
+	while(++i < BUFFER_SIZE + 1)
+		new->str[i] = 0;
 	if (!last)
 		*lst = new;
 	else
 		last->next = new;
 	new->fd = fd;
-	new->str = str;
-	new->next = NULL;
+	i = -1;
+	while (str[++i])
+		new->str[i] = str[i];
+	new->next = NULL;	
 }
 
 void	ft_freelist(t_list **begin_list, t_list *preserve, int fd)
@@ -100,17 +106,13 @@ void	ft_freelist(t_list **begin_list, t_list *preserve, int fd)
 		if (preserve->str[0] && preserve->fd == fd)
 			*begin_list = preserve;
 		else
-		{
-			free(preserve->str);
 			free(preserve);
-		}
 		return ;
 	}
 	if ((*begin_list)->fd == fd)
 	{
 		tmp = *begin_list;
 		*begin_list = (*begin_list)->next;
-		free(tmp->str);
 		free(tmp);
 		ft_freelist(begin_list, preserve, fd);
 	}

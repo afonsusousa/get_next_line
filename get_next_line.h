@@ -20,7 +20,7 @@
 typedef struct s_list
 {
 	int				fd;
-	char			*str;
+	char			str[BUFFER_SIZE + 1];
 	struct s_list	*next;
 }	t_list;
 
