@@ -6,7 +6,7 @@
 /*   By: amagno-r <amagno-r@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:57:37 by amagno-r          #+#    #+#             */
-/*   Updated: 2025/05/07 00:29:46 by amagno-r         ###   ########.fr       */
+/*   Updated: 2025/05/07 00:45:07 by amagno-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,13 +99,9 @@ char	*get_next_line(int fd)
 {
 	static t_list	*line = NULL;
 	char			*ret;
-	int				read_result;
 
-	if (fd < 0 || BUFFER_SIZE < 1)
+	if (fd < 0 || BUFFER_SIZE < 1 || fd > 1024)
 		return (NULL);
-	read_result = read(fd, NULL, 0);
-	if (read_result < 0)
-		return (ft_freelist(&line, fd), NULL);
 	get_list(&line, fd);
 	if (!line)
 		return (NULL);
