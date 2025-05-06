@@ -6,7 +6,7 @@
 /*   By: amagno-r <amagno-r@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:57:37 by amagno-r          #+#    #+#             */
-/*   Updated: 2025/04/20 20:34:10 by amagno-r         ###   ########.fr       */
+/*   Updated: 2025/04/27 21:27:14 by amagno-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ char	*ft_strcnpy(t_list *lst, char *dest, int fd)
 		lst = lst->next;
 	}
 	dest[++i] = '\0';
+	if(!*dest)
+		return (NULL);
 	return (dest);
 }
 
@@ -97,9 +99,9 @@ void	ft_freelist(t_list **begin_list, t_list *preserve, int fd)
 		return ;
 	if (*begin_list == NULL)
 	{
-		if (preserve->str[0] && preserve->fd == fd)
+		if (preserve && preserve->str[0] && preserve->fd == fd)
 			*begin_list = preserve;
-		else
+		else if (preserve)
 		{
 			free(preserve->str);
 			free(preserve);

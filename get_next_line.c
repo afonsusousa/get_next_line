@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_lines.c                                   :+:      :+:    :+:   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amagno-r <amagno-r@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:57:37 by amagno-r          #+#    #+#             */
-/*   Updated: 2025/04/20 20:34:10 by amagno-r         ###   ########.fr       */
+/*   Updated: 2025/04/27 21:29:07 by amagno-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,14 @@ void	get_list(t_list **dest, int fd)
 		if (rd <= 0)
 		{
 			free(buffer);
+			if (rd < 0)
+				ft_freelist(dest, NULL, fd);
 			return ;
 		}
 		buffer[rd] = '\0';
 		ft_add_back(dest, buffer, fd);
-		free(buffer);
 	}
+	return ;
 }
 
 char	*serve_line(t_list *lst, int fd)
@@ -70,7 +72,11 @@ char	*serve_line(t_list *lst, int fd)
 		iter = iter->next;
 	}
 	ret = (char *)malloc(linelen + 2);
-	ft_strcnpy(lst, ret, fd);
+	if(!ft_strcnpy(lst, ret, fd))
+	{
+		free(ret);
+		return (NULL);
+	}
 	return (ret);
 }
 
@@ -78,6 +84,7 @@ void	clean_list(t_list **lst, int fd)
 {
 	int		i;
 	int		j;
+	char	*buffer;
 	t_list	*preserve;
 	t_list	*last;
 
@@ -86,13 +93,17 @@ void	clean_list(t_list **lst, int fd)
 		return ;
 	last = ft_lstlast(*lst, fd);
 	if (!last)
-		return ;
+		return (free(preserve));
 	i = ft_newlen(last->str);
+	buffer = (char *)malloc(BUFFER_SIZE + 1);
+	if (!buffer)
+		return (free(preserve));
 	j = 0;
 	while (last->str[i] && last->str[++i])
-		preserve->str[j++] = last->str[i];
-	preserve->str[j] = 0;
+		buffer[j++] = last->str[i];
+	buffer[j] = '\0';
 	preserve->fd = fd;
+	preserve->str = buffer;
 	preserve->next = NULL;
 	ft_freelist(lst, preserve, fd);
 }
@@ -101,9 +112,16 @@ char	*get_next_line(int fd)
 {
 	static t_list	*line = NULL;
 	char			*ret;
+	int				read_result;
 
 	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
+	read_result = read(fd, NULL, 0);
+	if (read_result < 0)
+	{
+		ft_freelist(&line, NULL, fd);
+		return (NULL);
+	}
 	get_list(&line, fd);
 	if (!line)
 		return (NULL);

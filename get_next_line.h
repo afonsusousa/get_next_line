@@ -6,21 +6,21 @@
 /*   By: amagno-r <amagno-r@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:57:37 by amagno-r          #+#    #+#             */
-/*   Updated: 2025/04/20 20:34:10 by amagno-r         ###   ########.fr       */
+/*   Updated: 2025/05/06 01:09:47 by amagno-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
+#  define BUFFER_SIZE 1000
 # endif
 
 typedef struct s_list
 {
 	int				fd;
-	char			str[BUFFER_SIZE + 1];
+	char			*str;
 	struct s_list	*next;
 }	t_list;
 
