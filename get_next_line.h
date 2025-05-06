@@ -6,7 +6,7 @@
 /*   By: amagno-r <amagno-r@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:57:37 by amagno-r          #+#    #+#             */
-/*   Updated: 2025/05/06 01:09:47 by amagno-r         ###   ########.fr       */
+/*   Updated: 2025/05/06 23:31:50 by amagno-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*ft_strcnpy(t_list *lst, char *dest, int fd);
 int		ft_newlen(char *str);
 t_list	*ft_lstlast(t_list *lst, int fd);
 void	ft_add_back(t_list **lst, char *str, int fd);
-void	ft_freelist(t_list **lst, t_list *preserve, int fd);
+void	ft_freelist(t_list **lst, int fd);
 int		ft_foundnew(t_list *lst, int fd);
 void	get_list(t_list **dest, int fd);
 char	*serve_line(t_list *lst, int fd);

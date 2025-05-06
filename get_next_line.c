@@ -6,7 +6,7 @@
 /*   By: amagno-r <amagno-r@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:57:37 by amagno-r          #+#    #+#             */
-/*   Updated: 2025/04/27 21:29:07 by amagno-r         ###   ########.fr       */
+/*   Updated: 2025/05/06 23:48:00 by amagno-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ void	get_list(t_list **dest, int fd)
 	{
 		buffer = malloc(BUFFER_SIZE + 1);
 		if (!buffer)
-			return ;
+			return (ft_freelist(dest, fd));
 		rd = read(fd, buffer, BUFFER_SIZE);
 		if (rd <= 0)
 		{
 			free(buffer);
 			if (rd < 0)
-				ft_freelist(dest, NULL, fd);
+				ft_freelist(dest, fd);
 			return ;
 		}
 		buffer[rd] = '\0';
@@ -72,11 +72,9 @@ char	*serve_line(t_list *lst, int fd)
 		iter = iter->next;
 	}
 	ret = (char *)malloc(linelen + 2);
-	if(!ft_strcnpy(lst, ret, fd))
-	{
-		free(ret);
+	if(!ret)
 		return (NULL);
-	}
+	ft_strcnpy(lst, ret, fd);
 	return (ret);
 }
 
@@ -85,27 +83,21 @@ void	clean_list(t_list **lst, int fd)
 	int		i;
 	int		j;
 	char	*buffer;
-	t_list	*preserve;
 	t_list	*last;
 
-	preserve = (t_list *)malloc(sizeof(t_list));
-	if (!preserve)
-		return ;
 	last = ft_lstlast(*lst, fd);
 	if (!last)
-		return (free(preserve));
+		return ;
 	i = ft_newlen(last->str);
 	buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buffer)
-		return (free(preserve));
+		return ft_freelist(lst, fd);
 	j = 0;
 	while (last->str[i] && last->str[++i])
 		buffer[j++] = last->str[i];
 	buffer[j] = '\0';
-	preserve->fd = fd;
-	preserve->str = buffer;
-	preserve->next = NULL;
-	ft_freelist(lst, preserve, fd);
+	ft_freelist(lst, fd);
+	ft_add_back(lst, buffer, fd);
 }
 
 char	*get_next_line(int fd)
@@ -118,14 +110,13 @@ char	*get_next_line(int fd)
 		return (NULL);
 	read_result = read(fd, NULL, 0);
 	if (read_result < 0)
-	{
-		ft_freelist(&line, NULL, fd);
-		return (NULL);
-	}
+		return (ft_freelist(&line, fd), NULL);
 	get_list(&line, fd);
 	if (!line)
 		return (NULL);
 	ret = serve_line(line, fd);
+	if(!ret)
+		ft_freelist(&line, fd);
 	clean_list(&line, fd);
 	return (ret);
 }

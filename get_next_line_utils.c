@@ -6,7 +6,7 @@
 /*   By: amagno-r <amagno-r@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:57:37 by amagno-r          #+#    #+#             */
-/*   Updated: 2025/04/27 21:29:19 by amagno-r         ###   ########.fr       */
+/*   Updated: 2025/05/06 23:51:26 by amagno-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*ft_strcnpy(t_list *lst, char *dest, int fd)
 	}
 	dest[++i] = '\0';
 	if(!*dest)
-		return (NULL);
+		dest = NULL;
 	return (dest);
 }
 
@@ -76,12 +76,16 @@ void	ft_add_back(t_list **lst, char *str, int fd)
 	t_list	*new;
 	t_list	*last;
 
+	if(!str)
+		return ;
+	if (!*str)
+		return (free(str));
 	last = *lst;
 	while (last && last->next)
 		last = last->next;
 	new = (t_list *)malloc(sizeof(t_list));
 	if (!new)
-		return ;
+		return (free(str), ft_freelist(lst, fd));
 	if (!last)
 		*lst = new;
 	else
@@ -91,31 +95,20 @@ void	ft_add_back(t_list **lst, char *str, int fd)
 	new->next = NULL;
 }
 
-void	ft_freelist(t_list **begin_list, t_list *preserve, int fd)
+void	ft_freelist(t_list **begin_list, int fd)
 {
 	t_list	*tmp;
 
-	if (begin_list == NULL)
+	if (begin_list == NULL || *begin_list == NULL)
 		return ;
-	if (*begin_list == NULL)
-	{
-		if (preserve && preserve->str[0] && preserve->fd == fd)
-			*begin_list = preserve;
-		else if (preserve)
-		{
-			free(preserve->str);
-			free(preserve);
-		}
-		return ;
-	}
 	if ((*begin_list)->fd == fd)
 	{
 		tmp = *begin_list;
 		*begin_list = (*begin_list)->next;
 		free(tmp->str);
 		free(tmp);
-		ft_freelist(begin_list, preserve, fd);
+		ft_freelist(begin_list, fd);
 	}
 	else
-		ft_freelist(&((*begin_list)->next), preserve, fd);
+		ft_freelist(&((*begin_list)->next), fd);
 }
