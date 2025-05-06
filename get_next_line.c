@@ -6,7 +6,7 @@
 /*   By: amagno-r <amagno-r@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:57:37 by amagno-r          #+#    #+#             */
-/*   Updated: 2025/05/07 00:03:08 by amagno-r         ###   ########.fr       */
+/*   Updated: 2025/05/07 00:27:29 by amagno-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ void	get_list(t_list **dest, int fd)
 		buffer[rd] = '\0';
 		ft_add_back(dest, buffer, fd);
 	}
-	return ;
 }
 
 char	*serve_line(t_list *lst, int fd)
@@ -69,10 +68,9 @@ char	*serve_line(t_list *lst, int fd)
 		iter = iter->next;
 	}
 	ret = (char *)malloc(linelen + 2);
-	if(!ret)
+	if (!ret)
 		return (NULL);
-	ft_strcnpy(lst, ret, fd);
-	return (ret);
+	return (ft_strcnpy(lst, ret, fd));
 }
 
 void	clean_list(t_list **lst, int fd)
@@ -88,7 +86,7 @@ void	clean_list(t_list **lst, int fd)
 	i = ft_newlen(last->str);
 	buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buffer)
-		return ft_freelist(lst, fd);
+		return (ft_freelist(lst, fd));
 	j = 0;
 	while (last->str[i] && last->str[++i])
 		buffer[j++] = last->str[i];
@@ -112,8 +110,8 @@ char	*get_next_line(int fd)
 	if (!line)
 		return (NULL);
 	ret = serve_line(line, fd);
-	if(!ret)
-		ft_freelist(&line, fd);
+	if (!ret)
+		return (ft_freelist(&line, fd), NULL);
 	clean_list(&line, fd);
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: amagno-r <amagno-r@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:57:37 by amagno-r          #+#    #+#             */
-/*   Updated: 2025/05/06 23:51:26 by amagno-r         ###   ########.fr       */
+/*   Updated: 2025/05/07 00:24:52 by amagno-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*ft_strcnpy(t_list *lst, char *dest, int fd)
 	}
 	dest[++i] = '\0';
 	if(!*dest)
-		dest = NULL;
+		return (free(dest), NULL);
 	return (dest);
 }
 
