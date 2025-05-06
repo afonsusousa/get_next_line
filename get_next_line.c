@@ -6,7 +6,7 @@
 /*   By: amagno-r <amagno-r@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:57:37 by amagno-r          #+#    #+#             */
-/*   Updated: 2025/05/06 23:48:00 by amagno-r         ###   ########.fr       */
+/*   Updated: 2025/05/07 00:03:08 by amagno-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,11 @@ int	ft_foundnew(t_list *lst, int fd)
 {
 	int	i;
 
-	while (lst)
-	{
-		i = -1;
-		while (lst->str[++i] && lst->fd == fd)
-			if (lst->str[i] == '\n')
-				return (1);
-		lst = lst->next;
-	}
+	i = -1;
+	lst = ft_lstlast(lst, fd);
+	while (lst && lst->str[++i] && lst->fd == fd)
+		if (lst->str[i] == '\n')
+			return (1);
 	return (0);
 }
 
